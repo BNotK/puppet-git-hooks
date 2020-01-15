@@ -1,0 +1,27 @@
+#!/bin/bash
+
+min_msg_len=20
+min_msg_words=3
+
+ticket=$(git symbolic-ref HEAD | sed 's,^.*/\([A-Z]*-[0-9]*\)-.*$,\1,1')
+# remove ticket nuumber from message
+message="$(echo "$1" | sed "s,${ticket},,g;s,  , ,g;s,()$,,g;s,^:,,g" | xargs)"
+
+if [ ${#message} -le $min_msg_len ] ; then
+  echo "Commit message too short. Need at least ${min_msg_len} characters." > /dev/stderr
+  exit 1
+fi
+
+if [ $(( $(echo "$message" | wc -w) )) -le $min_msg_words ] ; then
+  echo "Commit message too short. Need at least ${min_msg_words} words. Please use sensful phrases." > /dev/stderr
+  exit 1
+fi
+
+if [ ! -z "$ticket" ]; then
+  if [[ ! $message =~ $ticket ]] ; then
+    message="${ticket} ${message}"
+  fi
+fi
+
+echo "$message"
+

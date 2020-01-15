@@ -7,7 +7,7 @@ original_message="$(test -f "$1" && cat "$1" || echo "")"
 
 ticket=$(git symbolic-ref HEAD | sed 's,^.*/\([A-Z]*-[0-9]*\)-.*$,\1,1')
 # remove ticket number from message
-message="$(echo "$original_message" | sed "s,^i[^/]*/[^/]*/,,g;,${ticket},,g;s,  , ,g;s,()$,,g;s,^:,,g" | xargs)"
+message="$(echo "$original_message" | sed "s,^[^/]*/[^/]*/,,g;,${ticket},,g;s,  , ,g;s,()$,,g;s,^:,,g" | xargs)"
 
 if [ ${#message} -le $min_msg_len ] ; then
   echo "Commit message too short. Need at least ${min_msg_len} characters." > /dev/stderr

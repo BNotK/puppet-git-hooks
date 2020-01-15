@@ -5,7 +5,7 @@ min_msg_words=3
 
 original_message="$(test -f "$1" && cat "$1" || echo "")"
 
-ticket=$(git symbolic-ref HEAD | sed 's,^.*/\([A-Z]*-[0-9]*\)-.*$,\1,1')
+ticket=$(git symbolic-ref HEAD | sed 's,^.*/\([A-Z]*-[0-9]*\)[-_].*$,\1,1')
 # remove ticket number from message
 message="$(echo "$original_message" | sed "s,^[^/]*/[^/]*/,,g;s,${ticket},,g;s,  , ,g;s,()$,,g;s,^:,,g" | xargs)"
 
@@ -25,6 +25,5 @@ if [ ! -z "$ticket" ]; then
   fi
 fi
 
-echo "$message" > "$1"
-echo "$message"
+echo "$message" | sed 's,^[^/]*/[^/]*/,,g;' > "$1"
 

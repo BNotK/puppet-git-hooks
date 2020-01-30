@@ -14,7 +14,7 @@ if [ ${#message} -le $min_msg_len ] ; then
   exit 1
 fi
 
-if [ $(( $(echo "$message" | wc -w) )) -le $min_msg_words ] ; then
+if [ $(( $(echo "$message" | wc -w) )) -lt $min_msg_words ] ; then
   echo "Commit message too short. Need at least ${min_msg_words} words. Please use sensful phrases." > /dev/stderr
   exit 1
 fi
